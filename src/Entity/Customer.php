@@ -4,9 +4,18 @@ namespace App\Entity;
 
 use App\Repository\CustomerRepository;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
 #[UniqueEntity('username', 'customer_code')]
+#[ApiResource(
+    collectionOperations: [
+        'get' => ['method' => 'get'],
+    ],
+    itemOperations: [
+        'get' => ['method' => 'get'],
+    ],
+)]
 class Customer
 {
     #[ORM\Id]
@@ -22,6 +31,9 @@ class Customer
 
     #[ORM\OneToOne(mappedBy: 'customer', cascade: ['persist', 'remove'])]
     private ?CustomerCompleteInformation $customer_infos = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $points = null;
 
     public function getId(): ?int
     {
@@ -65,6 +77,18 @@ class Customer
         }
 
         $this->customer_infos = $customer_infos;
+
+        return $this;
+    }
+
+    public function getPoints(): ?int
+    {
+        return $this->points;
+    }
+
+    public function setPoints(?int $points): self
+    {
+        $this->points = $points;
 
         return $this;
     }

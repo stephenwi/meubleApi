@@ -4,8 +4,18 @@ namespace App\Entity;
 
 use App\Repository\ProprietaireRepository;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 #[ORM\Entity(repositoryClass: ProprietaireRepository::class)]
+
+#[ApiResource(
+    collectionOperations: [
+        'get' => ['method' => 'get'],
+    ],
+    itemOperations: [
+        'get' => ['method' => 'get'],
+    ],
+)]
 class Proprietaire
 {
     #[ORM\Id]
@@ -33,6 +43,9 @@ class Proprietaire
 
     #[ORM\Column(length: 255)]
     private ?string $document_number = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $code_proprietaire = null;
 
     public function getId(): ?int
     {
@@ -119,6 +132,18 @@ class Proprietaire
     public function setDocumentNumber(string $document_number): self
     {
         $this->document_number = $document_number;
+
+        return $this;
+    }
+
+    public function getCodeProprietaire(): ?string
+    {
+        return $this->code_proprietaire;
+    }
+
+    public function setCodeProprietaire(string $code_proprietaire): self
+    {
+        $this->code_proprietaire = $code_proprietaire;
 
         return $this;
     }
